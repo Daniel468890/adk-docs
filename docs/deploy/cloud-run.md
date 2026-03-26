@@ -1,57 +1,18 @@
-# Deploy to Cloud Run
+import os
+from google.adk.agents import Agent
 
-<div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
-</div>
+# This creates your Beauty Expert Agent
+beauty_agent = Agent(
+    name="makeup-pro-assistant",
+    model="gemini-1.5-flash",
+    instruction="""You are a professional makeup artist and beauty influencer. 
+    Your goal is to help users with skincare routines, makeup application tips, 
+    and product recommendations. Be encouraging and aesthetic in your tone."""
+)
 
-[Cloud Run](https://cloud.google.com/run)
-is a fully managed platform that enables you to run your code directly on top of Google's scalable infrastructure.
-
-To deploy your agent, you can use either the `adk deploy cloud_run` command _(recommended for Python)_, or with `gcloud run deploy` command through Cloud Run.
-
-## Agent sample
-
-For each of the commands, we will reference the `Capital Agent` sample defined on the [LLM agent](../agents/llm-agents.md) page. We will assume it's in a directory (eg: `capital_agent`).
-
-To proceed, confirm that your agent code is configured as follows:
-
-=== "Python"
-
-    1. Agent code is in a file called `agent.py` within your agent directory.
-    2. Your agent variable is named `root_agent`.
-    3. `__init__.py` is within your agent directory and contains `from . import agent`.
-    4. Your `requirements.txt` file is present in the agent directory.
-
-=== "TypeScript"
-
-    1. Agent code is in a file called `agent.ts` within your project directory.
-    2. Your agent variable is named `rootAgent` and is exported.
-    3. Your `package.json` file is present in the agent directory with `@google/adk` and other dependencies.
-
-=== "Go"
-
-    1. Your application's entry point (the main package and main() function) is in a
-       single Go file. Using main.go is a strong convention.
-    2. Your agent instance is passed to a launcher configuration, typically using
-       agent.NewSingleLoader(yourAgent). The adkgo tool uses this launcher to start
-       your agent with the correct services.
-    3. Your go.mod and go.sum files are present in your project directory to manage
-       dependencies.
-
-    Refer to the following section for more details. You can also find a [sample app](https://github.com/google/adk-docs/tree/main/examples/go/cloud-run) in the Github repo.
-
-=== "Java"
-
-    1. Agent code is in a file called `CapitalAgent.java` within your agent directory.
-    2. Your agent variable is global and follows the format `public static final BaseAgent ROOT_AGENT`.
-    3. Your agent definition is present in a static class method.
-
-    Refer to the following section for more details. You can also find a [sample app](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run) in the Github repo.
-
-
-## Environment variables
-
-Set your environment variables as described in the [Setup and Installation](../get-started/installation.md) guide.
+# This starts the server on port 8080 (required for Cloud Run)
+if __name__ == "__main__":
+    beauty_agent.run(port=8080)
 
 ```bash
 export GOOGLE_CLOUD_PROJECT=your-project-id
